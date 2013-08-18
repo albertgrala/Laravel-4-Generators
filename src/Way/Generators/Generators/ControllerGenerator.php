@@ -14,16 +14,40 @@ class ControllerGenerator extends Generator {
      * @param  string $name
      * @return string Compiled template
      */
-    protected function getTemplate($template, $name)
+    protected function getTemplate($template, $nameController)
     {
+        //$name contains the lower controller name without 's Controller'. Get booksController make book
+        //$nameToUpper contains the upper controller name without 's Controller'. Get booksController make Book
+        //$namePlural contains the lower plural controller name. Get booksController make books
+        
         $this->template = $this->file->get($template);
+        
+        //get the ucfirst $name without 'sController'.  Get booksController make Book
+        $nameFirst = strstr($nameController, 'sController', true);
+
+        //get the controller name without 'sController'. Get booksController make book
+        $name = strtolower($nameFirst);
+
+        //get the plural $name. Get booksController make books
+        $namePlural = Pluralizer::plural($name);
+
+        //get the plural $name controller name with all Uper. Get booksController make Books        
+        $nameUpperAll = ucfirst($namePlural);
+        
+        //get the singular $name
+        //$nameSingular = Pluralizer::singular($nameController);
 
         if ($this->needsScaffolding($template))
         {
-            $this->template = $this->getScaffoldedController($template, $name);
+            $this->template = $this->getScaffoldedController($template, $nameController);
         }
 
-        return str_replace('{{name}}', $name, $this->template);
+        //dd($name);
+        $this->template = str_replace('{{nameFirst}}', $nameFirst, $this->template);
+        $this->template = str_replace('{{name}}', $name, $this->template);
+        $this->template = str_replace('{{namePlural}}', $namePlural, $this->template);
+        $this->template = str_replace('{{nameUpperAll}}', $nameUpperAll, $this->template);
+        return str_replace('{{nameController}}', $nameController, $this->template);
     }
 
     /**
