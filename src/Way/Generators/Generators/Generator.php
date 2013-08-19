@@ -48,10 +48,17 @@ abstract class Generator {
      */
     public function make($path, $template)
     {
+        // $path = /var/www/bintra/app/controllers/BooksController.php
+        // $template = /var/www/bintra/vendor/way/generators/src/Way/Generators/Commands/../Generators/templates/controller.txt
+        // BooksController, le quita el .php
         $this->name = basename($path, '.php');
+        //mete en el variable local path el path que viene
         $this->path = $this->getPath($path);
-        $template = $this->getTemplate($template, $this->name);
 
+        // guarda la plantilla en $template
+        $template = $this->getTemplate($template, $this->name);
+        
+        // si el fichero no exite, lo crea
         if (! $this->file->exists($this->path))
         {
             return $this->file->put($this->path, $template) !== false;

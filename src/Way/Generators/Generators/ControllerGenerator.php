@@ -7,6 +7,41 @@ use Illuminate\Support\Pluralizer;
 
 class ControllerGenerator extends Generator {
 
+    protected $directory;
+    protected $container;
+    protected $lib_path;
+    protected $file;
+
+    public function __construct(File $file)
+    {
+        $this->directory = app_path().'/lib';
+        $this->container = $this->directory.'/aitiba';
+        $this->file = $file;
+    }
+    protected function fillRepository($name)
+    {
+        $file = base_path()."/vendor/way/generators/src/Way/Generators/Commands/../Generators/templates/repository.txt";
+        $template = $this->file->get($file);
+
+        $template = str_replace('{{nameFirst}}', $name['first'], $template);
+        //$template = str_replace('{{name}}', $name['lower'], $template);
+        //$template = str_replace('{{namePlural}}', $name['plural'], $template);
+        //$template = str_replace('{{nameUpperAll}}', $name['upperAll'], $template);
+        //$template =  str_replace('{{nameController}}', $name['original'], $template);
+        $this->file->put($this->lib_path.'/'.$name['first'].'Repository.php', $template);
+       // return true;
+    }
+
+    /*protected function fillServiceProvider($name)
+    {
+        $template = $this->file->get('serviceProvider');
+    }
+
+    protected function fillRepositoryImplements($name)
+    {
+        $template = $this->file->get('repositoryImplements');
+    }*/
+
     /**
      * Fetch the compiled template for a controller
      *
@@ -16,38 +51,91 @@ class ControllerGenerator extends Generator {
      */
     protected function getTemplate($template, $nameController)
     {
-        //$name contains the lower controller name without 's Controller'. Get booksController make book
-        //$nameToUpper contains the upper controller name without 's Controller'. Get booksController make Book
-        //$namePlural contains the lower plural controller name. Get booksController make books
+        $name = $this->getSynonymous($nameController);
+       //dd($name);
+        // set the lib controle route 
+        $this->lib_path = $this->container.'/'.$name['first'];
         
+        // create folders if necesary
+        $this->folders($name['first']);
+
+        // fill the controller
         $this->template = $this->file->get($template);
         
-        //get the ucfirst $name without 'sController'.  Get booksController make Book
-        $nameFirst = strstr($nameController, 'sController', true);
+        // fill the repository
+        $this->fillRepository($name);
 
-        //get the controller name without 'sController'. Get booksController make book
-        $name = strtolower($nameFirst);
+        // fill the Service Provider
+        //$this->fillServiceProvider($name);
 
-        //get the plural $name. Get booksController make books
-        $namePlural = Pluralizer::plural($name);
-
-        //get the plural $name controller name with all Uper. Get booksController make Books        
-        $nameUpperAll = ucfirst($namePlural);
+        //fill Repository Implements
+        //$this->fillRepositoryImplements($name);
         
-        //get the singular $name
-        //$nameSingular = Pluralizer::singular($nameController);
-
+        
+       
         if ($this->needsScaffolding($template))
         {
             $this->template = $this->getScaffoldedController($template, $nameController);
         }
 
-        //dd($name);
-        $this->template = str_replace('{{nameFirst}}', $nameFirst, $this->template);
-        $this->template = str_replace('{{name}}', $name, $this->template);
-        $this->template = str_replace('{{namePlural}}', $namePlural, $this->template);
-        $this->template = str_replace('{{nameUpperAll}}', $nameUpperAll, $this->template);
-        return str_replace('{{nameController}}', $nameController, $this->template);
+        $this->template = str_replace('{{nameFirst}}', $name['first'], $this->template);
+        $this->template = str_replace('{{name}}', $name['lower'], $this->template);
+        $this->template = str_replace('{{namePlural}}', $name['plural'], $this->template);
+        $this->template = str_replace('{{nameUpperAll}}', $name['upperAll'], $this->template);
+        return str_replace('{{nameController}}', $name['original'], $this->template);
+    }
+
+     /**
+     * Get synonymous of the name controller
+     *
+     * @param  string $nameController Controller name
+     * @return array
+     */
+    protected function getSynonymous($nameController)
+    {
+        $name = array();
+        //get original value
+        $name['original'] = $nameController;
+
+         //get the ucfirst $name without 'sController'.  Get booksController make Book
+        $name['first'] = strstr($nameController, 'sController', true);
+
+        //get the controller name without 'sController'. Get booksController make book
+        $name['lower'] = strtolower($name['first']);
+
+        //get the plural $name. Get booksController make books
+        $name['plural'] = Pluralizer::plural($name['lower']);
+
+        //get the plural $name controller name with all Uper. Get booksController make Books        
+        $name['upperAll'] = ucfirst($name['plural']);
+
+        //get the singular $name['original']
+        //$name['singular'] = Pluralizer::singular($name['original']);
+        return $name;
+    }
+    /**
+     * Create the neccesary folders for library
+     */
+    protected function folders($package)
+    {
+        // create app/lib if not exist
+        if(!$this->file->isDirectory($this->directory))
+        {
+            $this->file->makeDirectory($this->directory);
+        }
+
+        // create app/lib/aitiba if not exist
+        if(!$this->file->isDirectory($this->container))
+        {
+            $this->file->makeDirectory($this->container);
+        }
+
+        // create app/lib/aitiba/book if not exist
+        if(!$this->file->isDirectory($this->lib_path))
+        {
+            $this->file->makeDirectory($this->lib_path);
+        }
+        //return "folders";
     }
 
     /**
