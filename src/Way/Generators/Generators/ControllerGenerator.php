@@ -32,15 +32,51 @@ class ControllerGenerator extends Generator {
        // return true;
     }
 
-    /*protected function fillServiceProvider($name)
-    {
-        $template = $this->file->get('serviceProvider');
-    }
 
     protected function fillRepositoryImplements($name)
     {
-        $template = $this->file->get('repositoryImplements');
-    }*/
+        $file = base_path()."/vendor/way/generators/src/Way/Generators/Commands/../Generators/templates/repositoryImplements.txt";
+        $template = $this->file->get($file);
+
+        $template = str_replace('{{nameFirst}}', $name['first'], $template);
+        $template = str_replace('{{name}}', $name['lower'], $template);
+        $template = str_replace('{{namePlural}}', $name['plural'], $template);
+        $template = str_replace('{{nameUpperAll}}', $name['upperAll'], $template);
+        //$template =  str_replace('{{nameController}}', $name['original'], $template);
+        $this->file->put($this->lib_path.'/'.$name['first'].'RepositoryImplements.php', $template);
+    }
+
+    protected function fillServiceProvider($name)
+    {
+        $file = base_path()."/vendor/way/generators/src/Way/Generators/Commands/../Generators/templates/serviceProvider.txt";
+        $template = $this->file->get($file);
+
+        $template = str_replace('{{nameFirst}}', $name['first'], $template);
+        $this->file->put($this->lib_path.'/'.$name['first'].'ServiceProvider.php', $template);
+
+        // add resource route to routes.php
+
+       $search = "Illuminate\Workbench\WorkbenchServiceProvider',";
+       $replace = $search."\n        'aitiba\\".$name['first']."\\".$name['first']."ServiceProvider',";
+            $file = app_path() . '/config/app.php';
+         $template = $this->file->get($file);
+         $template =  str_replace($search, $replace, $template);
+       //  dd($template);
+          $this->file->put($file, $template);
+
+        // echo
+
+        /*$this->file->append(
+            app_path() . '/config/app.php',
+            $user." PRUEBA"
+        );*/
+         $this->file->append(
+            app_path() . '/routes.php',
+            "\n\nRoute::resource('".$name['plural']."', '".$name['original']."');"
+        );
+
+
+    }
 
     /**
      * Fetch the compiled template for a controller
@@ -65,12 +101,11 @@ class ControllerGenerator extends Generator {
         // fill the repository
         $this->fillRepository($name);
 
-        // fill the Service Provider
-        //$this->fillServiceProvider($name);
-
         //fill Repository Implements
-        //$this->fillRepositoryImplements($name);
+        $this->fillRepositoryImplements($name);
         
+        // fill the Service Provider
+        $this->fillServiceProvider($name);
         
        
         if ($this->needsScaffolding($template))

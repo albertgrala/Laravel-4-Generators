@@ -1,0 +1,13 @@
+<?php namespace aitiba\{{nameFirst}};
+use Illuminate\Support\ServiceProvider;
+ 
+class {{nameFirst}}ServiceProvider extends ServiceProvider {
+ 
+  public function register()
+  {
+    $this->app->bind(
+      'aitiba\{{nameFirst}}\{{nameFirst}}Repository',
+      'aitiba\{{nameFirst}}\{{nameFirst}}RepositoryImplements'
+    );
+  } 
+}
