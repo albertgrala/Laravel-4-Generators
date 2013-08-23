@@ -1,18 +1,23 @@
 <?php
-
-class {{name}} extends BaseController {
-
+use aitiba\{{nameFirst}}\{{nameFirst}}Repository as {{nameFirst}};
+class {{nameController}} extends BaseController {
 	/**
-	 * {{modelClass}} Repository
-	 *
-	 * @var {{modelClass}}
-	 */
-	protected ${{modelInstance}};
+     * The {{name}} instance.
+     *
+     * @var ${{name}} string
+     */
+    private ${{name}};
 
-	public function __construct({{modelClass}} ${{modelInstance}})
-	{
-		$this->{{modelInstance}} = ${{modelInstance}};
-	}
+    /**
+     * Create a new {{nameFirst}}.
+     *
+     * @param  ${{name}} ${{name}}
+     * @return void
+     */
+    public function __construct({{nameFirst}} ${{name}})
+    {
+      $this->{{name}} = ${{name}};
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -21,9 +26,8 @@ class {{name}} extends BaseController {
 	 */
 	public function index()
 	{
-		${{collection}} = $this->{{modelInstance}}->all();
-
-		return View::make('{{collection}}.index', compact('{{collection}}'));
+		${{namePlural}} = $this->{{name}}->findAll();
+        return View::make('{{namePlural}}.index')->with('{{namePlural}}', ${{namePlural}});
 	}
 
 	/**
@@ -33,7 +37,7 @@ class {{name}} extends BaseController {
 	 */
 	public function create()
 	{
-		return View::make('{{collection}}.create');
+		return View::make('{{namePlural}}.create');
 	}
 
 	/**
@@ -43,20 +47,17 @@ class {{name}} extends BaseController {
 	 */
 	public function store()
 	{
-		$input = Input::all();
-		$validation = Validator::make($input, {{modelClass}}::$rules);
-
-		if ($validation->passes())
-		{
-			$this->{{modelInstance}}->create($input);
-
-			return Redirect::route('{{collection}}.index');
-		}
-
-		return Redirect::route('{{collection}}.create')
-			->withInput()
-			->withErrors($validation)
-			->with('message', 'There were validation errors.');
+		$data = Input::all();
+        
+        $v = $this->{{name}}->validation($data);
+        if ( is_object($v) ) {
+            return Redirect::route('{{namePlural}}.create')->withErrors($v)->withInput();
+        }
+        
+        if ( $this->{{name}}->store($data) )
+        {
+            return Redirect::route('{{namePlural}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} succesfully created!'));
+        }
 	}
 
 	/**
@@ -67,9 +68,8 @@ class {{name}} extends BaseController {
 	 */
 	public function show($id)
 	{
-		${{modelInstance}} = $this->{{modelInstance}}->findOrFail($id);
-
-		return View::make('{{collection}}.show', compact('{{modelInstance}}'));
+		${{name}} = $this->{{name}}->findOrFail($id);
+        return View::make('{{namePlural}}.show')->with('{{name}}', ${{name}});
 	}
 
 	/**
@@ -80,14 +80,11 @@ class {{name}} extends BaseController {
 	 */
 	public function edit($id)
 	{
-		${{modelInstance}} = $this->{{modelInstance}}->find($id);
-
-		if (is_null(${{modelInstance}}))
-		{
-			return Redirect::route('{{collection}}.index');
-		}
-
-		return View::make('{{collection}}.edit', compact('{{modelInstance}}'));
+		${{name}} = $this->{{name}}->find($id);
+        if (!${{name}}) {
+            return Redirect::route('{{namePlural}}.index');
+        }
+        return View::make('{{namePlural}}.edit')->with('{{name}}', ${{name}});
 	}
 
 	/**
@@ -98,21 +95,18 @@ class {{name}} extends BaseController {
 	 */
 	public function update($id)
 	{
-		$input = array_except(Input::all(), '_method');
-		$validation = Validator::make($input, {{modelClass}}::$rules);
-
-		if ($validation->passes())
-		{
-			${{modelInstance}} = $this->{{modelInstance}}->find($id);
-			${{modelInstance}}->update($input);
-
-			return Redirect::route('{{collection}}.show', $id);
-		}
-
-		return Redirect::route('{{collection}}.edit', $id)
-			->withInput()
-			->withErrors($validation)
-			->with('message', 'There were validation errors.');
+		$data = Input::all();
+        $data['id'] = $id;
+        $v = $this->{{name}}->validation($data);
+        if ( is_object($v) ) {
+            return Redirect::route('{{namePlural}}.edit', $id)->withErrors($v)->withInput();
+        }
+        
+        if ( $this->{{name}}->update($data) )
+        {
+            return Redirect::route('{{namePlural}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} succesfully edited!'));
+        }
+        return false;
 	}
 
 	/**
@@ -123,9 +117,11 @@ class {{name}} extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		$this->{{modelInstance}}->find($id)->delete();
-
-		return Redirect::route('{{collection}}.index');
+		if($this->{{name}}->destroy($id))
+        {
+            return Redirect::route('{{namePlural}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} succesfully deleted!'));
+        } else {
+            return Redirect::route('{{namePlural}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} problems to delete!'));
+        }
 	}
-
 }

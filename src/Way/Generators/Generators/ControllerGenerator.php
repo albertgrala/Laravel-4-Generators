@@ -107,7 +107,6 @@ class ControllerGenerator extends Generator {
         // fill the Service Provider
         $this->fillServiceProvider($name);
         
-       
         if ($this->needsScaffolding($template))
         {
             $this->template = $this->getScaffoldedController($template, $nameController);
