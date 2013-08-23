@@ -64,8 +64,7 @@ class ControllerGenerator extends Generator {
        //  dd($template);
           $this->file->put($file, $template);
 
-        // echo
-
+        
         /*$this->file->append(
             app_path() . '/config/app.php',
             $user." PRUEBA"
@@ -74,7 +73,8 @@ class ControllerGenerator extends Generator {
             app_path() . '/routes.php',
             "\n\nRoute::resource('".$name['plural']."', '".$name['original']."');"
         );
-
+         //regenerate composer auto-load file.
+        exec("composer.phar dump-autoload");
 
     }
 
@@ -128,6 +128,7 @@ class ControllerGenerator extends Generator {
      */
     protected function getSynonymous($nameController)
     {
+        //dd($nameController);
         $name = array();
         //get original value
         $name['original'] = $nameController;

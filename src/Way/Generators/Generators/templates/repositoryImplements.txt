@@ -3,7 +3,7 @@ use {{nameFirst}};
 use Validator;
 use Redirect;
 use Lang;
-class Home{{nameFirst}}Repository implements {{nameFirst}}Repository
+class {{nameFirst}}RepositoryImplements implements {{nameFirst}}Repository
 {
 	/**
      * Find all {{namePlural}}.
