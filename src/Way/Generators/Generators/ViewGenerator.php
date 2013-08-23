@@ -21,7 +21,7 @@ class ViewGenerator extends Generator {
         {
             return $this->getScaffoldedTemplate($name);
         }
-
+//var_dump($template);
         // Otherwise, just set the file
         // contents to the file name
         return $name;
