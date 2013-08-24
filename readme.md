@@ -1,3 +1,10 @@
+I make a modification to can make my controllers,models, views, repositories..
+
+php artisan generate:scaffold aurk --fields="autor:string, body:text,
+title:string" && php artisan migrate
+
+----------------------------------------------------------------------
+
 This Laravel 4 package provides a variety of generators to speed up your development process. These generators include:
 
 - `generate:model`

@@ -4,7 +4,6 @@ namespace Way\Generators\Generators;
 
 use Illuminate\Filesystem\Filesystem as File;
 use Illuminate\Support\Pluralizer;
-use Schema;
 
 class ControllerGenerator extends Generator {
 
@@ -108,8 +107,6 @@ class ControllerGenerator extends Generator {
         // fill the Service Provider
         $this->fillServiceProvider($name);
         
-        $this->makeMigration($name);
-
         if ($this->needsScaffolding($template))
         {
             $this->template = $this->getScaffoldedController($template, $nameController);
@@ -120,21 +117,6 @@ class ControllerGenerator extends Generator {
         $this->template = str_replace('{{namePlural}}', $name['plural'], $this->template);
         $this->template = str_replace('{{nameUpperAll}}', $name['upperAll'], $this->template);
         return str_replace('{{nameController}}', $name['original'], $this->template);
-    }
-
-    /**
-     * Know if the table for migration is created
-     *
-     * @param  string $nameController Controller name
-     * @return void
-     */
-    protected function makeMigration($name)
-    {
-        if(!Schema::hasTable('{{nameUpperAll}}')) 
-        {
-            exec('cd '.app_path());
-            exec('php artisan migrate');            
-        }
     }
 
      /**

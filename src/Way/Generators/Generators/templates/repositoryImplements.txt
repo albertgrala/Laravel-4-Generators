@@ -113,9 +113,10 @@ class {{nameFirst}}RepositoryImplements implements {{nameFirst}}Repository
 		$user = {{nameFirst}}::find($data['id']);
 		//unset($user['password_confirmation']);
 	
-		$user = $this->setData($user, $data);
+	//	$user = $this->setData($user, $data);
 		
-        if ($user->save()) 
+		//return ;
+        if ($user->update($data)) 
         {
 			return Redirect::route('{{namePlural}}.index')
 				->with("flash_message", Lang::get('user.User succesfully edited!'));

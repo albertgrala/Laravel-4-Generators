@@ -15,6 +15,14 @@ class ViewGenerator extends Generator {
      */
     protected function getTemplate($template, $name)
     {
+        //Schema::hasTable('users')
+        //TODO que mire si existe la tabla, si exsite no ejecutar
+        //$users = DB::table('users')->count();
+
+       // echo ('cd '.app_path());
+        //exec('cd '.app_path());
+        //     echo('php artisan migrate');
+        exec('php artisan migrate');
         $this->template = $this->file->get($template);
 
         if ($this->needsScaffolding($template))
