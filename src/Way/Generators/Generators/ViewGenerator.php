@@ -22,7 +22,7 @@ class ViewGenerator extends Generator {
        // echo ('cd '.app_path());
         //exec('cd '.app_path());
         //     echo('php artisan migrate');
-        exec('php artisan migrate');
+        //exec('php artisan migrate');
         $this->template = $this->file->get($template);
 
         if ($this->needsScaffolding($template))
@@ -49,6 +49,7 @@ class ViewGenerator extends Generator {
         $formalModel = ucwords($pluralModel); // Posts
         $className = Pluralizer::singular($formalModel);
 
+        $synonymous = $this->getSynonymous($model);
         // Create and Edit views require form elements
         if ($name === 'create.blade' or $name === 'edit.blade')
         {
@@ -68,7 +69,44 @@ class ViewGenerator extends Generator {
         $this->template = str_replace('{{headings}}', implode(PHP_EOL."\t\t\t\t", $headings), $this->template);
         $this->template = str_replace('{{fields}}', implode(PHP_EOL."\t\t\t\t\t", $fields) . PHP_EOL . $editAndDeleteLinks, $this->template);
 
+        $this->template = str_replace('{{nameFirst}}', $synonymous['first'], $this->template);
+        $this->template = str_replace('{{name}}', $synonymous['lower'], $this->template);
+        $this->template = str_replace('{{namePlural}}', $synonymous['plural'], $this->template);
+        $this->template = str_replace('{{nameUpperAll}}', $synonymous['upperAll'], $this->template);
+      //  $this->template = str_replace('{{nameController}}', $synonymous['original'], $this->template);
+
         return $this->template;
+    }
+
+    /**
+     * Get synonymous of the name controller
+     *
+     * @param  string $model Model name
+     * @return array
+     */
+    protected function getSynonymous($model)
+    {
+        //dd($model);
+        $name = array();
+        //get original value User
+         //get the ucfirst $name without 'sController'.  Get booksController make Book
+        $name['first'] = $model;
+
+        //$name['first'] = strstr($model, 'sController', true);
+
+        //get the controller name without 'sController'. Get booksController make book
+        $name['lower'] = strtolower($name['first']);
+
+        //get the plural $name. Get booksController make books
+        $name['plural'] = Pluralizer::plural($name['lower']);
+
+        //get the plural $name controller name with all Uper. Get booksController make Books        
+        $name['upperAll'] = ucfirst($name['plural']);
+
+        //get the singular $name['original']
+        //$name['singular'] = Pluralizer::singular($name['original']);
+
+        return $name;
     }
 
     /**
@@ -94,16 +132,16 @@ class ViewGenerator extends Generator {
         }, array_keys($fields));
 
         // Now, we'll add the edit and delete buttons.
-        $editAndDelete = <<<EOT
+        /*$editAndDelete = <<<EOT
                     <td>{{ link_to_route('{$pluralModel}.edit', 'Edit', array(\${$model}->id), array('class' => 'btn btn-info')) }}</td>
                     <td>
                         {{ Form::open(array('method' => 'DELETE', 'route' => array('{$pluralModel}.destroy', \${$model}->id))) }}
                             {{ Form::submit('Delete', array('class' => 'btn btn-danger')) }}
                         {{ Form::close() }}
                     </td>
-EOT;
+EOT;*/
 
-        return array($headings, $fields, $editAndDelete);
+        return array($headings, $fields, null);
     }
 
     /**

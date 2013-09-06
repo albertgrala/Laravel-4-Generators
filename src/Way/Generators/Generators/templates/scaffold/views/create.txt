@@ -1,25 +1,26 @@
-@extends('layouts.scaffold')
+@extends('layouts.main')
 
-@section('main')
+@section('content')
 
-<h1>Create {{className}}</h1>
+<h3 class="thin underline">Crear {{nameFirst}} nuevo</h3>
+<div class="columns">
+<div class="six-columns">
+{{ Form::open(array('url' => '{{namePlural}}')) }}
+{{ Form::token(); }}
 
-{{ Form::open(array('route' => '{{pluralModel}}.store')) }}
-	<ul>
+<ul>
 {{formElements}}
-		<li>
-			{{ Form::submit('Submit', array('class' => 'btn')) }}
-		</li>
-	</ul>
+  <li>
+    {{ Form::submit('Submit', array('class' => 'btn')) }}
+  </li>
+</ul>
+
 {{ Form::close() }}
-
 @if ($errors->any())
-	<ul>
-		{{ implode('', $errors->all('<li class="error">:message</li>')) }}
-	</ul>
+<ul>
+  {{ implode('', $errors->all('<li class="error">:message</li>')) }}
+</ul>
 @endif
-
-{{ HTML::script('js/ckeditor.js') }}
-{{ HTML::script('js/sample.js') }}
+</div>
+</div>
 @stop
-

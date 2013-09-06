@@ -1,6 +1,5 @@
 <?php namespace aitiba\{{nameFirst}};
 use {{nameFirst}};
-use Group;
 use Hash;
 use Input;
 use Redirect;
@@ -30,7 +29,7 @@ class {{nameFirst}}RepositoryImplements implements {{nameFirst}}Repository
      */
 	public function validation($data) 
 	{
-		if (Input::get('_method') == 'PUT' )
+		/*if (Input::get('_method') == 'PUT' )
 		{
 			$user = {{nameFirst}}::find($data['id']);
 			$this->emailHasChange($user, $data);
@@ -42,7 +41,7 @@ class {{nameFirst}}RepositoryImplements implements {{nameFirst}}Repository
 				unset({{nameFirst}}::$rules['password']);
 				unset({{nameFirst}}::$rules['password_confirmation']);
 			}
-		}
+		}*/
 		
 
 		$v = Validator::make($data, {{nameFirst}}::$rules);

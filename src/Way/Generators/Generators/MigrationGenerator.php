@@ -19,12 +19,6 @@ class MigrationGenerator extends Generator {
         // Next, set the migration class name
         $stub = str_replace('{{name}}', \Str::studly($name), $stub);
 
-        //if(!Schema::hasTable('{{nameUpperAll}}')) 
-        //{
-            echo "pasa";
-            exec('cd '.app_path());
-            exec('php artisan migrate');            
-        //}
         // Now, we're going to handle the tricky
         // work of creating the Schema
         $upMethod = $this->getUpStub();

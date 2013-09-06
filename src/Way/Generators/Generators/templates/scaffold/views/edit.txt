@@ -1,9 +1,15 @@
-@extends('layouts.scaffold')
+@extends('layouts.main')
 
-@section('main')
+@section('content')
 
-<h1>Edit {{className}}</h1>
-{{ Form::model(${{model}}, array('method' => 'PATCH', 'route' => array('{{pluralModel}}.update', ${{model}}->id))) }}
+  <h3 class="thin underline">Editar {{nameFirst}} nuevo</h3>
+  <div class="columns">
+  <div class="six-columns">
+
+
+{{ Form::open(array('route' => array('{{namePlural}}.update', ${{nameFirst}}->id), 'method' => 'PUT', 'class' => 'form-horizontal')) }}
+{{ Form::hidden('actionType', 'update') }}
+{{ Form::token(); }}
 	<ul>
 {{formElements}}
 		<li>
@@ -18,5 +24,7 @@
 		{{ implode('', $errors->all('<li class="error">:message</li>')) }}
 	</ul>
 @endif
+</div>
+</div>
 
 @stop

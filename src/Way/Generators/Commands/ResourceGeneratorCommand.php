@@ -201,7 +201,7 @@ class ResourceGeneratorCommand extends Command {
         // If generating a scaffold, we also need views/layouts/scaffold
         if (get_called_class() === 'Way\\Generators\\Commands\\ScaffoldGeneratorCommand')
         {
-            $views[] = 'scaffold';
+            $views[] = 'main';
             $this->generator->folders($layouts);
         }
 
@@ -209,7 +209,7 @@ class ResourceGeneratorCommand extends Command {
         // and create each one.
         foreach($views as $view)
         {
-            $path = $view === 'scaffold' ? $layouts : $container;
+            $path = $view === 'main' ? $layouts : $container;
             $this->generateView($view, $path);
         }
     }
