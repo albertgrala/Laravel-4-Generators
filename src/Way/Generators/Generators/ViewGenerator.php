@@ -43,26 +43,29 @@ class ViewGenerator extends Generator {
      */
     protected function getScaffoldedTemplate($name)
     {
+        //dd($name);
         $model = $this->cache->getModelName();
 
-        $pluralModel = Pluralizer::plural($model); // posts
+        /*$pluralModel = Pluralizer::plural($model); // posts
         $formalModel = ucwords($pluralModel); // Posts
-        $className = Pluralizer::singular($formalModel);
+        $className = Pluralizer::singular($formalModel);*/
 
         $synonymous = $this->getSynonymous($model);
         // Create and Edit views require form elements
-        if ($name === 'create.blade' or $name === 'edit.blade')
-        {
-            $formElements = $this->makeFormElements();
-
-            $this->template = str_replace('{{formElements}}', $formElements, $this->template);
+        if ($name === 'create.blade') {
+          $formElements = $this->makeFormElements();
+          $this->template = str_replace('{{formElements}}', $formElements, $this->template);
+        } elseif ($name === 'edit.blade') {
+          $formElements = $this->makeFormElements($model);
+          $this->template = str_replace('{{formElements}}', $formElements, $this->template);
         }
+    //}
 
         // Replace template vars in view
-        foreach(array('model', 'pluralModel', 'formalModel', 'className') as $var)
+       /* foreach(array('model', 'pluralModel', 'formalModel', 'className') as $var)
         {
             $this->template = str_replace('{{'.$var.'}}', $$var, $this->template);
-        }
+        }*/
 
         // And finally create the table rows
         list($headings, $fields, $editAndDeleteLinks) = $this->makeTableRows($model);
@@ -150,10 +153,10 @@ EOT;*/
      *
      * @return string
      */
-    public function makeFormElements()
+    public function makeFormElements($model = null)
     {
         $formMethods = array();
-
+//dd($this->cache->getFields());
         foreach($this->cache->getFields() as $name => $type)
         {
             $formalName = ucwords($name);
@@ -174,17 +177,23 @@ EOT;*/
                     break;
 
                 default:
-                    $element = "{{ Form::text('$name') }}";
+                    if($model != null)
+                    {    
+                      $value = '$'.$model."->".$name;
+                      $element = "{{ Form::text('$name', $value, array('id' => '$name')) }}";
+                    } else {
+                      $element = "{{ Form::text('$name', null, array('id' => '$name')) }}";  
+                    }
                     break;
             }
 
             // Now that we have the correct $element,
             // We can build up the HTML fragment
             $frag = <<<EOT
-        <li>
-            {{ Form::label('$name', '$formalName:') }}
+        <p class="inline-large-label button-height">
+            {{ Form::label('$name', '$formalName:', array('class' => 'label')) }}
             $element
-        </li>
+        </p>
 
 EOT;
 

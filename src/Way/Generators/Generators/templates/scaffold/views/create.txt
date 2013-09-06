@@ -8,14 +8,12 @@
 {{ Form::open(array('url' => '{{namePlural}}')) }}
 {{ Form::token(); }}
 
-<ul>
 {{formElements}}
-  <li>
-    {{ Form::submit('Submit', array('class' => 'btn')) }}
-  </li>
-</ul>
-
+  <p class="button-height">
+    {{ Form::submit('Create', array('class' => 'btn')) }}
+  </p>
 {{ Form::close() }}
+
 @if ($errors->any())
 <ul>
   {{ implode('', $errors->all('<li class="error">:message</li>')) }}

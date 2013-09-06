@@ -101,7 +101,7 @@ class {{nameController}} extends BaseController {
         if ( is_object($v) ) {
             return Redirect::route('{{namePlural}}.edit', $id)->withErrors($v)->withInput();
         }
-        
+        unset($data['actionType']);
         if ( $this->{{name}}->update($data) )
         {
             return Redirect::route('{{namePlural}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} succesfully edited!'));

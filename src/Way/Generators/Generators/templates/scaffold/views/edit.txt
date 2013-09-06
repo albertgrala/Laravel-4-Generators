@@ -10,13 +10,11 @@
 {{ Form::open(array('route' => array('{{namePlural}}.update', ${{nameFirst}}->id), 'method' => 'PUT', 'class' => 'form-horizontal')) }}
 {{ Form::hidden('actionType', 'update') }}
 {{ Form::token(); }}
-	<ul>
+
 {{formElements}}
-		<li>
-			{{ Form::submit('Update', array('class' => 'btn btn-info')) }}
-			{{ link_to_route('{{pluralModel}}.show', 'Cancel', ${{model}}->id, array('class' => 'btn')) }}
-		</li>
-	</ul>
+  <p class="button-height">
+    {{ Form::submit('Update', array('class' => 'btn btn-info')) }}
+ </p>
 {{ Form::close() }}
 
 @if ($errors->any())
