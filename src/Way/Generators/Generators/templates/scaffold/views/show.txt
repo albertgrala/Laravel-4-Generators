@@ -1,6 +1,6 @@
-@extends('layouts.main')
+@extends('layouts.scaffold')
 
-@section('content')
+@section('main')
 <h3 class="thin underline">Ver {{nameFirst}}</h3>
   <div class="columns">
   <div class="six-columns">

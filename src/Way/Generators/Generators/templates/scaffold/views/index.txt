@@ -1,11 +1,11 @@
-@extends('layouts.main')
+@extends('layouts.scaffold')
 
-@section('content')
+@section('main')
 
 @if(${{namePlural}})
   <h3 class="thin underline">{{namePlural}}</h3>
   <div style="float:right;margin-top:-50px;">
-    <a class="button icon-add-user with-tooltip" href="{{namePlural}}/create" title="Crear nuevo {{nameFirst}}"></a>
+    <a class="button icon-add-user with-tooltip" href="{{name}}/create" title="Crear nuevo {{nameFirst}}">Crear nuevo {{nameFirst}}</a>
   </div>
 
   <div class="new-row twelve-columns">
@@ -23,19 +23,19 @@
   	<td class="center">
         <!-- view -->
         <span class="button-group">
-          {{ Form::open(array('method' => 'GET', 'route' => array('{{namePlural}}.show', ${{nameFirst}}->id))) }}
-          <a class="button icon-download" href="{{namePlural}}/{{ ${{nameFirst}}->id }}">View</a>
+          {{ Form::open(array('method' => 'GET', 'route' => array('{{name}}.show', ${{nameFirst}}->id))) }}
+          <a class="button icon-download" href="{{name}}/{{ ${{nameFirst}}->id }}">View</a>
             {{ Form::close() }}
         </span>
 
         <!-- edit -->
         <span class="button-group">
-          <a class="button icon-pencil" href="/bintra/public/{{namePlural}}/{{ ${{nameFirst}}->id }}/edit">Edit</a>
+          <a class="button icon-pencil" href="/bintra/public/{{name}}/{{ ${{nameFirst}}->id }}/edit">Edit</a>
         </span>
 
         <!-- delete -->
         <span class="button-group">
-          {{ Form::open(array('route' => array('{{namePlural}}.destroy', ${{nameFirst}}->id), 'method' => 'delete')) }}
+          {{ Form::open(array('route' => array('{{name}}.destroy', ${{nameFirst}}->id), 'method' => 'delete')) }}
             {{ Form::submit('Delete', array('class' => 'button icon-trash confirm')) }}
           {{ Form::close() }}
               </span>

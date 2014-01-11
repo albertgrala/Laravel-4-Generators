@@ -87,7 +87,7 @@ class ResourceGeneratorCommand extends Command {
             $this->generateTest();
         }
 
-        $this->generator->updateRoutesFile($this->model);
+       // $this->generator->updateRoutesFile($this->model);
         $this->info('Updated ' . app_path() . '/routes.php');
 
         // We're all finished, so we
@@ -223,6 +223,7 @@ class ResourceGeneratorCommand extends Command {
      */
     protected function generateView($view, $path)
     {
+        echo($view);
         $this->call(
             'generate:view',
             array(

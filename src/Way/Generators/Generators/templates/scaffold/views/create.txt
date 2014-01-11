@@ -1,11 +1,11 @@
-@extends('layouts.main')
+@extends('layouts.scaffold')
 
-@section('content')
+@section('main')
 
 <h3 class="thin underline">Crear {{nameFirst}} nuevo</h3>
 <div class="columns">
 <div class="six-columns">
-{{ Form::open(array('url' => '{{namePlural}}')) }}
+{{ Form::open(array('url' => '{{name}}')) }}
 {{ Form::token(); }}
 
 {{formElements}}

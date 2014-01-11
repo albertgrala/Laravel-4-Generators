@@ -51,12 +51,12 @@ class {{nameController}} extends BaseController {
         
         $v = $this->{{name}}->validation($data);
         if ( is_object($v) ) {
-            return Redirect::route('{{namePlural}}.create')->withErrors($v)->withInput();
+            return Redirect::route('{{name}}.create')->withErrors($v)->withInput();
         }
         
         if ( $this->{{name}}->store($data) )
         {
-            return Redirect::route('{{namePlural}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} succesfully created!'));
+            return Redirect::route('{{name}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} succesfully created!'));
         }
 	}
 
@@ -82,7 +82,7 @@ class {{nameController}} extends BaseController {
 	{
 		${{name}} = $this->{{name}}->find($id);
         if (!${{name}}) {
-            return Redirect::route('{{namePlural}}.index');
+            return Redirect::route('{{name}}.index');
         }
         return View::make('{{namePlural}}.edit')->with('{{name}}', ${{name}});
 	}
@@ -99,12 +99,12 @@ class {{nameController}} extends BaseController {
         $data['id'] = $id;
         $v = $this->{{name}}->validation($data);
         if ( is_object($v) ) {
-            return Redirect::route('{{namePlural}}.edit', $id)->withErrors($v)->withInput();
+            return Redirect::route('{{name}}.edit', $id)->withErrors($v)->withInput();
         }
         
         if ( $this->{{name}}->update($data) )
         {
-            return Redirect::route('{{namePlural}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} succesfully edited!'));
+            return Redirect::route('{{name}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} succesfully edited!'));
         }
         return false;
 	}
@@ -119,9 +119,9 @@ class {{nameController}} extends BaseController {
 	{
 		if($this->{{name}}->destroy($id))
         {
-            return Redirect::route('{{namePlural}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} succesfully deleted!'));
+            return Redirect::route('{{name}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} succesfully deleted!'));
         } else {
-            return Redirect::route('{{namePlural}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} problems to delete!'));
+            return Redirect::route('{{name}}.index')->with("flash_message", Lang::get('{{nameUpperAll}} problems to delete!'));
         }
 	}
 }

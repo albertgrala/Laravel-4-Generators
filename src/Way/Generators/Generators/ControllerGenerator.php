@@ -63,7 +63,6 @@ class ControllerGenerator extends Generator {
          $template =  str_replace($search, $replace, $template);
        //  dd($template);
           $this->file->put($file, $template);
-
         
         /*$this->file->append(
             app_path() . '/config/app.php',
@@ -71,7 +70,7 @@ class ControllerGenerator extends Generator {
         );*/
          $this->file->append(
             app_path() . '/routes.php',
-            "\n\nRoute::resource('".$name['plural']."', '".$name['original']."');"
+            "\n\nRoute::resource('".$name['lower']."', '".$name['original']."');"
         );
          //regenerate composer auto-load file.
         exec("composer.phar dump-autoload");

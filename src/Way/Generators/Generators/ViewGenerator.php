@@ -191,7 +191,7 @@ EOT;*/
             // We can build up the HTML fragment
             $frag = <<<EOT
         <p class="inline-large-label button-height">
-            {{ Form::label('$name', '$formalName:', array('class' => 'label')) }}
+            {{ Form::label('$name', '$formalName:') }}
             $element
         </p>
 

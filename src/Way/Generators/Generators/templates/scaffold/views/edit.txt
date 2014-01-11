@@ -1,13 +1,13 @@
-@extends('layouts.main')
+@extends('layouts.scaffold')
 
-@section('content')
+@section('main')
 
   <h3 class="thin underline">Editar {{nameFirst}} nuevo</h3>
   <div class="columns">
   <div class="six-columns">
 
 
-{{ Form::open(array('route' => array('{{namePlural}}.update', ${{nameFirst}}->id), 'method' => 'PUT', 'class' => 'form-horizontal')) }}
+{{ Form::open(array('route' => array('{{name}}.update', ${{nameFirst}}->id), 'method' => 'PUT', 'class' => 'form-horizontal')) }}
 {{ Form::hidden('actionType', 'update') }}
 {{ Form::token(); }}
 
