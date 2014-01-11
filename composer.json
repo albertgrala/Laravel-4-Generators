@@ -12,11 +12,11 @@
         "illuminate/support": "4.0.x",
         "illuminate/console": "4.0.x",
         "illuminate/filesystem": "4.0.x",
-        "mustache/mustache": "dev-master",
+        "mustache/mustache": "2.4.*",
         "way/laravel-test-helpers": "dev-master"
     },
     "require-dev": {
-        "mockery/mockery": "dev-master"
+        "mockery/mockery": "0.8.*"
     },
     "autoload": {
         "psr-0": {
@@ -31,5 +31,5 @@
             "dev-master": "1.0-dev"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }
